@@ -38,7 +38,7 @@ const Home = () => {
 
 	const getEveryCountry = () => {
 		axios.get(ALL_COUNTRIES_API, {
-			fullText: true
+			fullText: false
 		})
 			.then(response => {
 				setCountriesArray(response.data)
