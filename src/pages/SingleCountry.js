@@ -21,12 +21,13 @@ const SingleCountry = () => {
 	const SINGLE_COUNTRY_API = `https://restcountries.com/v3.1/name/${name}`
 	const COUNTRY_CODE_API = 'https://restcountries.com/v3.1/alpha/'
 
+	// load country data when url changes
 	useEffect(() => {
-		resetCountry()
 		getCountryData()
 	}, [currentURL])
 
 
+	// load bordering countries
 	useEffect(() => {
 		const promises = getBorderPromises()
 		changePromiseToCountry(promises)
@@ -47,27 +48,31 @@ const SingleCountry = () => {
 		})
 	}
 
-	const resetCountry = () => {
-		setCountry(null)
-	}
-
 	const countryHasBorders = (country) => {
 		if (country.borders) {
-			setBorderCountryCodes(country.borders)
+			return true
 		}
+
+		return false
 	}
 
 	const getCountryData = () => {
 		axios.get(SINGLE_COUNTRY_API)
 			.then(response => {
 				setCountry(response.data[0])
-				countryHasBorders(response.data[0])
+
+				// if the country has borders assign the border codes
+				if(countryHasBorders(response.data[0])) {
+					setBorderCountryCodes(response.data[0].borders)
+				}
 			})
 
 			.catch(error => {
 				console.error(error)
 			})
 	}
+
+
 
 	if (!country) {
 		return (
