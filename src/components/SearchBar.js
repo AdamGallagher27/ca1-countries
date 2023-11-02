@@ -1,18 +1,17 @@
 
 import { Button, Col, Form, Row } from "react-bootstrap"
-import {useState} from 'react'
 
 const SearchBar = (props) => {
 
-  const [searchText, setSearchText] = useState('')
-
   const handleTyping = (event) => {
-    setSearchText(event.target.value)
-    console.log(event.target.value)
-  }
+    const typedWord = event.target.value
 
-  const sendSearchValue = () => {
-    props.handleSearchClick(searchText)
+    if(typedWord.length > 2){
+      props.handleSearch(typedWord)
+    }
+    else {
+      props.handleSearch('')
+    }
   }
 
   return (
@@ -20,9 +19,6 @@ const SearchBar = (props) => {
       <Row>
         <Col>
           <Form.Control size="lg" type="text" placeholder="Large text" onChange={handleTyping} />
-        </Col>
-        <Col>
-          <Button onClick={sendSearchValue} >Search</Button>
         </Col>
       </Row>
     </Form>
