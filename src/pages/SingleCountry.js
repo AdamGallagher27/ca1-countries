@@ -76,7 +76,11 @@ const SingleCountry = () => {
 	const getCountryData = () => {
 		axios.get(SINGLE_COUNTRY_API)
 			.then(response => {
-				setCountry(response.data[0])
+				setCountry(response.data.find((country) => {
+					return country.name.common === name
+				}))
+				// console.log(response)
+
 
 				// if the country has borders assign the border codes
 				if (countryHasBorders(response.data[0])) {
@@ -130,7 +134,7 @@ const SingleCountry = () => {
 			</Row>
 			<Row>
 				<Col>
-					<CapitalCityWeather weather={capitalWeather} city={country.capital[0]} />
+					<CapitalCityWeather weather={capitalWeather} city={country.capital} />
 				
 				</Col>
 			</Row>
