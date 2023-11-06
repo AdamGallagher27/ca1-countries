@@ -7,6 +7,8 @@ import CountryCard from "../components/CountryCard"
 import SearchBar from "../components/SearchBar"
 import SortDropDown from "../components/SortDropDown"
 import RegionFilter from "../components/RegionFilter"
+import SearchError from "../components/SearchError"
+import PaginateButton from "../components/PaginateButton"
 
 const Home = () => {
 	const [startingCountries, setStartingCountries] = useState([])
@@ -50,23 +52,46 @@ const Home = () => {
 			})
 	}
 
-	// get search from search box and apply filter to filtered countries array
-	const handleSearch = (searchTerm) => {
-		// set the search value
-		setSearchValue(searchTerm)
-
-		// reset the pagination
-		resetPagination()
-
-		// create the filter to apply to filtered countries
-		const filter = startingCountries.filter((country) => {
+	// filter given countries array by search term
+	const applySearchFilter = (searchTerm, countriesArray) => {
+		return countriesArray.filter((country) => {
 			return country.name.common
 				.toLowerCase()
 				.includes(searchTerm.toLowerCase())
 		})
+	}
+
+	// get search from search box and apply filter to filtered countries array
+	const handleSearch = (searchTerm) => {
+
+		// reset the pagination, sort value and region
+		resetPagination()
+		resetSort()
+		resetRegion()
+
+		// set the search value
+		setSearchValue(searchTerm)
+
+		// create the filter to apply to filtered countries
+		const filter = applySearchFilter(searchTerm, startingCountries)
 
 		// apply filter
 		setFilteredCountries(filter)
+	}
+
+	// reset the filter countries state variable
+	const resetFilteredCountries = () => {
+		setFilteredCountries(startingCountries)
+	}
+
+	// remove type of sort category
+	const resetSort = () => {
+		setSortType('none')
+	}
+
+	// remove region category
+	const resetRegion = () => {
+		setSortType('none')
 	}
 
 	// restore pagination to original 15 cards
@@ -86,13 +111,6 @@ const Home = () => {
 
 	const dispatchRegionValue = (selectedRegion) => {
 		setRegion(selectedRegion)
-		console.log(selectedRegion)
-	}
-
-	// reset the cards to default order
-	const restoreDefaultOrder = () => {
-		setFilteredCountries(startingCountries)
-		resetPagination()
 	}
 
 	// sort the countries by alphabetical order
@@ -109,7 +127,6 @@ const Home = () => {
 		})
 
 		setFilteredCountries(sortAlphabetically)
-		resetPagination()
 	}
 
 	// sort the countries by population
@@ -117,7 +134,6 @@ const Home = () => {
 		const sortByPopulation = [...filteredCountries]
 		sortByPopulation.sort((a, b) => b.population - a.population)
 		setFilteredCountries(sortByPopulation)
-		resetPagination()
 	}
 
 	// sort the countries by area size
@@ -125,14 +141,13 @@ const Home = () => {
 		const sortByArea = [...filteredCountries]
 		sortByArea.sort((a, b) => b.area - a.area)
 		setFilteredCountries(sortByArea)
-		resetPagination()
 	}
 
 	// change the order of the country cards based on sort dropdown
 	const sortCountryCards = () => {
 		switch (sortType) {
-			case "default":
-				restoreDefaultOrder()
+			case "none":
+				resetFilteredCountries()
 				break
 
 			case "alphabetical":
@@ -147,20 +162,27 @@ const Home = () => {
 				sortByArea()
 				break
 		}
+
+		resetPagination()
 	}
 
+
 	const applyRegionFilter = (selectedRegion) => {
-		if (selectedRegion === 'default') {
-			setFilteredCountries(startingCountries)
+
+		if (selectedRegion === 'none') {
+			resetFilteredCountries()
 		}
 		else {
-			const filteredCountriesCopy = [...filteredCountries]
-			
-			const countriesByRegion = filteredCountriesCopy.filter((country) => {
+
+			// filter countries by given region
+			const countriesByRegion = startingCountries.filter((country) => {
 				return (country.region.toLowerCase() === selectedRegion)
 			})
 
-			setFilteredCountries(countriesByRegion)
+			// if the search value is assigned apply it to filtered coutries
+			const countriesWithSearchFilter = (searchValue) ? applySearchFilter(searchValue, countriesByRegion) : countriesByRegion
+
+			setFilteredCountries(countriesWithSearchFilter)
 		}
 
 		resetPagination()
@@ -191,13 +213,14 @@ const Home = () => {
 				</Col>
 			</Row>
 			<Row className="g-4" md={3} xs={1}>
-				{/* MAKE ME INTO SEARCH ERROR COMPONENT */}
 				{countriesCards.length > 0
 					? countriesCards
-					: `sorry we couldnt find anything for ${searchValue}`}
+					: <SearchError searchValue={searchValue} />
+				}
 			</Row>
-			{/* MAKE PAGINATE BUTTON COMPONENT */}
-			<Button onClick={loadMoreCountries}>Pagination</Button>
+
+			{paginationLimit <= filteredCountries.length ? <PaginateButton loadMoreCountries={loadMoreCountries} /> : ''}
+
 		</>
 	)
 }
