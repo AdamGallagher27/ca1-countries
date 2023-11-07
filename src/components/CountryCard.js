@@ -1,23 +1,31 @@
 import React from 'react'
-import { Card } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Button, Card, Col } from 'react-bootstrap'
+import { Link, useNavigate } from 'react-router-dom'
 
 const CountryCard = (props) => {
 
 	const country = props.country
+	const navigate = useNavigate()
+
+	const openCountry = () => {
+		navigate(`/country/${country.name.common}`)
+	}
 
 	return (
-			<Card>
-				<Card.Img src={country.flags.png} />
-				<Card.Body>
-					<Card.Title>
-						<Link to={`/country/${country.name.common}`}>{country.name.common}</Link>
-					</Card.Title>
-					<p>Population : {country.population}</p>
-					<p>Region : {country.region}</p>
-					<p>Capital : {country.capital}</p>
-				</Card.Body>
-			</Card>
+		<Col className='mb-3'>
+		<Card className='pb-2 px-3 h-100'>
+			<Card.Img className='mt-3' src={country.flags.png} />
+			<Card.Body>
+				<Card.Title>
+					{country.name.common}
+				</Card.Title>
+				<Card.Text>Population : {country.population}</Card.Text>
+				<Card.Text>Region : {country.region}</Card.Text>
+				<Card.Text>Capital : {country.capital}</Card.Text>
+			</Card.Body>
+			<Button className='btn-success' onClick={openCountry}>Learn More</Button>
+		</Card>
+		</Col>
 	)
 }
 

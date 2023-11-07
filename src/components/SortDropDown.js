@@ -10,7 +10,7 @@ const SortDropDown = (props) => {
     } 
 
     return (
-            <DropdownButton title='sort' onSelect={handleChange}>
+            <DropdownButton variant='success' title='sort' onSelect={handleChange}>
                 <Dropdown.Item eventKey="none">None</Dropdown.Item>
                 <Dropdown.Item eventKey="alphabetical">AlphaBetical</Dropdown.Item>
                 <Dropdown.Item eventKey='population'>Population</Dropdown.Item>

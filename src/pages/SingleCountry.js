@@ -4,11 +4,12 @@ import { Col, Row, Spinner, Image } from 'react-bootstrap'
 import CountryCard from '../components/CountryCard'
 import axios from 'axios'
 import CapitalCityWeather from '../components/CapitalCityWeather'
+import Loading from '../components/Loading'
 
 const SingleCountry = () => {
 
 	// url data
-	const { name, capital } = useParams()
+	const { name } = useParams()
 	const currentURL = useLocation()
 
 	// current country variable
@@ -110,9 +111,7 @@ const SingleCountry = () => {
 	// while country is loading return spinner component
 	if (!country) {
 		return (
-			<Spinner animation="grow" role="status">
-				<span className="visually-hidden">Loading...</span>
-			</Spinner>
+			<Loading />
 		)
 	}
 
@@ -121,23 +120,34 @@ const SingleCountry = () => {
 		return <CountryCard key={index} country={country} />
 	})
 
+	const loadWeatherComponent = capitalWeather ? <CapitalCityWeather weather={capitalWeather} city={country.capital} /> : <Loading />
+	const titleBorderCountries = borderCountries.length > 0 ? <h2 className='mt-5 mb-4'>Bordering Countries</h2> : ''
+
 	return (
 
 		<>
+			<h1>{country.name.common}</h1>
 			<Row>
-				<Col>
-					<Image src={country.flags.png} />
+				<Col md={9} >
+					<Image className=' w-100' src={country.flags.png}  fluid/>
 				</Col>
 				<Col>
-					<p>{country.name.common}</p>
+					{loadWeatherComponent}
 				</Col>
 			</Row>
 			<Row>
+			<h2 className='mt-5 mb-4'>Facts About {name}</h2>
 				<Col>
-					<CapitalCityWeather weather={capitalWeather} city={country.capital} />
-				
+					<p>Capital : {country.capital[0]}</p>
+					<p>Area : {country.area}</p>
+					<p>Region : {country.region}</p>
+					<p>Population : {country.population}</p>
+					<p>{country.name.common} is {country.unMember ? '' : 'not'} a member of the united nations</p>
+					<p>{country.name.common} is {country.unMember ? '' : 'not'} an independent state</p>
 				</Col>
 			</Row>
+
+			{titleBorderCountries}
 			<Row className='g-4' md={3} xs={1}>
 				{borderingCountriesCards}
 			</Row>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
-import { Row, Button, Col } from "react-bootstrap"
+import { Row, Button, Col, Spinner } from "react-bootstrap"
 
 // components
 import CountryCard from "../components/CountryCard"
@@ -109,6 +109,7 @@ const Home = () => {
 		setSortType(sortValue)
 	}
 
+	// function to change the region value for the region select dropdown
 	const dispatchRegionValue = (selectedRegion) => {
 		setRegion(selectedRegion)
 	}
@@ -180,9 +181,9 @@ const Home = () => {
 			})
 
 			// if the search value is assigned apply it to filtered coutries
-			const countriesWithSearchFilter = (searchValue) ? applySearchFilter(searchValue, countriesByRegion) : countriesByRegion
+			const countriesWithFilters = (searchValue) ? applySearchFilter(searchValue, countriesByRegion) : countriesByRegion
 
-			setFilteredCountries(countriesWithSearchFilter)
+			setFilteredCountries(countriesWithFilters)
 		}
 
 		resetPagination()
@@ -204,15 +205,11 @@ const Home = () => {
 	return (
 		<>
 			<SearchBar handleSearch={handleSearch} />
-			<Row>
-				<Col>
+			<div className="d-flex flex-row gap-3 mb-4">
 					<SortDropDown dispatchSortValue={dispatchSortValue} />
-				</Col>
-				<Col>
 					<RegionFilter dispatchRegionValue={dispatchRegionValue} />
-				</Col>
-			</Row>
-			<Row className="g-4" md={3} xs={1}>
+			</div>
+			<Row md={3} xs={1}>
 				{countriesCards.length > 0
 					? countriesCards
 					: <SearchError searchValue={searchValue} />

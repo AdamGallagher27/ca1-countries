@@ -9,7 +9,7 @@ const RegionFilter = (props) => {
   }
 
   return (
-    <DropdownButton title='regionFilter' onSelect={handleChange}>
+    <DropdownButton variant='success' title='Region Filter' onSelect={handleChange}>
       <Dropdown.Item eventKey="none">None</Dropdown.Item>
       <Dropdown.Item eventKey="europe">Europe</Dropdown.Item>
       <Dropdown.Item eventKey='africa'>Africa</Dropdown.Item>

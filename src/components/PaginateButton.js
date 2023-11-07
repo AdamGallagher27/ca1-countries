@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap'
 const PaginateButton = (props) => {
 
   return (
-    <Button onClick={props.loadMoreCountries}>Load More Countries</Button>
+    <Button className='mb-5' variant='success' onClick={props.loadMoreCountries}>Load More Countries</Button>
   )
 }
 

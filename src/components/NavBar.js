@@ -1,12 +1,25 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Navbar, Container, Row, Button, Col } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
+
 
 const NavBar = () => {
+
+  const navigate = useNavigate()
+
+
+  const navigateToHome = () => {
+    navigate('/')
+  }
+
   return (
-    <>
-        <div>NavBar</div>
-        <Link to={'/'}>Home</Link>
-    </>
+      <Navbar className=" mb-5 border-bottom bg-success
+      ">
+        <Container>
+              <Navbar.Brand className='text-light'>Country DataBase</Navbar.Brand>
+              <Button className='btn-light' onClick={navigateToHome}>HomePage</Button>
+        </Container>
+      </Navbar>
   )
 }
 

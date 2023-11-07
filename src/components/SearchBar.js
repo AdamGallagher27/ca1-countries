@@ -15,10 +15,10 @@ const SearchBar = (props) => {
   }
 
   return (
-    <Form>
+    <Form className="mb-3 mx-0">
       <Row>
         <Col>
-          <Form.Control size="lg" type="text" placeholder="Large text" onChange={handleTyping} />
+          <Form.Control size="lg" type="text" placeholder="Search a Country" onChange={handleTyping} />
         </Col>
       </Row>
     </Form>
