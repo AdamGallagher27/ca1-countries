@@ -1,8 +1,10 @@
 
+// components
 import { Button, Col, Form, Row } from "react-bootstrap"
 
 const SearchBar = (props) => {
 
+  // handle user typing in text box
   const handleTyping = (event) => {
     const typedWord = event.target.value
 

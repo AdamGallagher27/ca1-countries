@@ -1,3 +1,5 @@
+
+// components
 import {Card} from 'react-bootstrap';
 
 const CapitalCityWeather = (props) => {

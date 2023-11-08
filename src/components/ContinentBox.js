@@ -1,7 +1,10 @@
 import React from 'react'
-import { Col, Card, Button } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
 
+// components
+import { Col, Card, Button } from 'react-bootstrap'
+
+// hooks
+import { useNavigate } from 'react-router-dom'
 
 const ContinentBox = (props) => {
 

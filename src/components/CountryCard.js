@@ -1,5 +1,9 @@
 import React from 'react'
+
+// components
 import { Button, Card, Col } from 'react-bootstrap'
+
+// hooks
 import { Link, useNavigate } from 'react-router-dom'
 
 const CountryCard = (props) => {

@@ -1,3 +1,4 @@
+// components
 import CountryCard from "../components/CountryCard"
 
 

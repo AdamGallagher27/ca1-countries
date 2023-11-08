@@ -1,5 +1,5 @@
+// hooks
 import { useState, useEffect } from "react"
-import { Row, Button, Col, Spinner } from "react-bootstrap"
 
 // components
 import SearchBar from "../components/SearchBar"
@@ -7,11 +7,15 @@ import SortDropDown from "../components/SortDropDown"
 import SearchError from "../components/SearchError"
 import PaginateButton from "../components/PaginateButton"
 import Loading from "../components/Loading"
+import Title from "../components/Title"
+import { Row, Button, Col, Spinner } from "react-bootstrap"
+
 
 // utilities
-import {sortCountryCards } from "../utilities/sort"
+import { sortCountryCards } from "../utilities/sort"
 import { createCardComponents } from "../utilities/createCards"
 import { getEveryCountry } from "../utilities/API"
+import { applySearchFilter } from "../utilities/applySearchFilter"
 
 const Home = () => {
 	const [startingCountries, setStartingCountries] = useState([])
@@ -43,15 +47,6 @@ const Home = () => {
 			console.error(error)
 		}
 
-	}
-
-	// filter given countries array by search term
-	const applySearchFilter = (searchTerm, countriesArray) => {
-		return countriesArray.filter((country) => {
-			return country.name.common
-				.toLowerCase()
-				.includes(searchTerm.toLowerCase())
-		})
 	}
 
 	// sort the countries cards
@@ -98,17 +93,16 @@ const Home = () => {
 	}
 
 	// if countries is not set return loading component
-	if(!filteredCountries) {
+	if (!filteredCountries) {
 		return <Loading />
 	}
 
 	// variable to hold countries cards
 	const countriesCards = createCardComponents(filteredCountries, paginationLimit)
 
-
 	return (
 		<>
-			<h1 className="mb-4">HomePage</h1>
+			<Title title='HomePage' />
 			<SearchBar handleSearch={handleSearch} />
 			<div className="d-flex flex-row gap-3 mb-4">
 				<SortDropDown dispatchSortValue={dispatchSortValue} />

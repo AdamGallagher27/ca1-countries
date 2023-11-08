@@ -1,12 +1,15 @@
 import React from 'react'
+
+// components
 import { Navbar, Container, Row, Button, Col } from 'react-bootstrap'
+
+// hooks
 import { useNavigate } from 'react-router-dom'
 
 
 const NavBar = () => {
 
   const navigate = useNavigate()
-
 
   const navigateToHome = () => {
     navigate('/')
@@ -15,7 +18,6 @@ const NavBar = () => {
   const navigateToContinentSelect = () => {
     navigate('/continents')
   }
-
 
   return (
     <Navbar className=" mb-5 border-bottom bg-success

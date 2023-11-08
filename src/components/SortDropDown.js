@@ -1,8 +1,11 @@
 import React from 'react'
+
+// componets
 import { Dropdown, DropdownButton } from 'react-bootstrap'
 
 const SortDropDown = (props) => {
 
+	// send sort value to parent component
 	const handleChange = (eventKey) => {
 		props.dispatchSortValue(eventKey)
 	}

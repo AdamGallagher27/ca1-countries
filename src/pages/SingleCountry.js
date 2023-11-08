@@ -1,13 +1,17 @@
+
+// hooks
 import { useState, useEffect } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
+
+// components
 import { Col, Row, Image } from 'react-bootstrap'
 import CountryCard from '../components/CountryCard'
 import CapitalCityWeather from '../components/CapitalCityWeather'
 import Loading from '../components/Loading'
 
-
 // utilities
 import { getCountryData, getCapitalCityWeather, getBorderPromises } from '../utilities/API'
+import Title from '../components/Title'
 
 const SingleCountry = () => {
 
@@ -104,7 +108,7 @@ const SingleCountry = () => {
 	return (
 
 		<>
-			<h1>{country.name.common}</h1>
+			<Title title={country.name.common}/>
 			<Row>
 				<Col md={9} >
 					<Image className=' w-100' src={country.flags.png} fluid />

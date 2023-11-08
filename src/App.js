@@ -1,5 +1,5 @@
+// router
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Container, Row, Col } from 'react-bootstrap';
 
 // pages
 import Home from './pages/Home';
@@ -10,6 +10,7 @@ import Continents from './pages/Continents';
 
 // components
 import NavBar from './components/NavBar';
+import { Container, Row, Col } from 'react-bootstrap';
 
 function App() {
   return (

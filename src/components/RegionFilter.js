@@ -1,6 +1,7 @@
 import React from 'react'
-import { Dropdown, DropdownButton } from 'react-bootstrap'
 
+// components
+import { Dropdown, DropdownButton } from 'react-bootstrap'
 
 const RegionFilter = (props) => {
 

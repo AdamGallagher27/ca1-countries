@@ -1,4 +1,6 @@
 import React from 'react'
+
+// components
 import { Button } from 'react-bootstrap'
 
 const PaginateButton = (props) => {
