@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
-import { Col, Row, Spinner, Image } from 'react-bootstrap'
+import { Col, Row, Image } from 'react-bootstrap'
 import CountryCard from '../components/CountryCard'
-import axios from 'axios'
 import CapitalCityWeather from '../components/CapitalCityWeather'
 import Loading from '../components/Loading'
+
+
+// utilities
+import { getCountryData, getCapitalCityWeather, getBorderPromises } from '../utilities/API'
 
 const SingleCountry = () => {
 
@@ -22,39 +25,49 @@ const SingleCountry = () => {
 	// weather in capital city
 	const [capitalWeather, setCapitalWeather] = useState('')
 
-	// api links
-	const SINGLE_COUNTRY_API = `https://restcountries.com/v3.1/name/${name}`
-	const COUNTRY_CODE_API = 'https://restcountries.com/v3.1/alpha/'
-	const WEATHER_API_KEY = 'sWBUyM53rPjjrXgcAxVPIQ==oFIz6GrLF5cYVi1H'
-	const WEATHER_API_LINK = `https://api.api-ninjas.com/v1/weather?city=${country?.capital[0]}`
-
 	// load country data when url changes
 	useEffect(() => {
-		getCountryData()
+		loadCurrentCountry()
 	}, [currentURL])
-
 
 	// load bordering countries
 	useEffect(() => {
-		const promises = getBorderPromises()
+		const promises = getBorderPromises(borderCountryCodes)
 		changePromiseToCountry(promises)
 	}, [borderCountryCodes])
 
 
 	// get weather for capital city
 	useEffect(() => {
-		getCapitalCityWeather()
+		loadCurrentWeather()
 	}, [country])
 
 
-	const getBorderPromises = () => {
+	// helper function to load the selected country
+	const loadCurrentCountry = async () => {
+		try {
+			const response = await getCountryData(name)
+			setCountry(response)
 
-		// make an api request for every bordering country and return them as an array of promises 
-		const promises = borderCountryCodes.map((code) => {
-			return axios.get(COUNTRY_CODE_API + code).then(res => res.data[0])
-		})
+			// if the country has borders add borders to the country codes array
+			if(countryHasBorders(response)) {
+				setBorderCountryCodes(response.borders)
+			}
+		}
+		catch (error) {
+			console.error(error)
+		}
+	}
 
-		return promises
+	// helper function to load current weather in capital city
+	const loadCurrentWeather = async () => {
+		try {
+			const response = await getCapitalCityWeather(country.capital[0])
+			setCapitalWeather(response)
+		}
+		catch (error) {
+			console.error(error)
+		}
 	}
 
 	// convert the border promises to country objects
@@ -64,48 +77,13 @@ const SingleCountry = () => {
 		})
 	}
 
+
 	// check if country has borders
-	const countryHasBorders = (country) => {
-		if (country.borders) {
+	const countryHasBorders = (countryObject) => {
+		if (countryObject.borders) {
 			return true
 		}
-
 		return false
-	}
-
-	// get data about selected country
-	const getCountryData = () => {
-		axios.get(SINGLE_COUNTRY_API)
-			.then(response => {
-				setCountry(response.data.find((country) => {
-					return country.name.common === name
-				}))
-				// console.log(response)
-
-
-				// if the country has borders assign the border codes
-				if (countryHasBorders(response.data[0])) {
-					setBorderCountryCodes(response.data[0].borders)
-				}
-			})
-
-			.catch(error => {
-				console.error(error)
-			})
-	}
-
-	// return weather about the capital city
-	const getCapitalCityWeather = () => {
-		axios.get(WEATHER_API_LINK, {
-			headers: { 'X-Api-Key': WEATHER_API_KEY }
-		})
-			.then(response => {
-				setCapitalWeather(response.data)
-			})
-			.catch(error => {
-				console.error(error)
-			})
-
 	}
 
 	// while country is loading return spinner component
@@ -129,16 +107,16 @@ const SingleCountry = () => {
 			<h1>{country.name.common}</h1>
 			<Row>
 				<Col md={9} >
-					<Image className=' w-100' src={country.flags.png}  fluid/>
+					<Image className=' w-100' src={country.flags.png} fluid />
 				</Col>
 				<Col>
 					{loadWeatherComponent}
 				</Col>
 			</Row>
 			<Row>
-			<h2 className='mt-5 mb-4'>Facts About {name}</h2>
+				<h2 className='mt-5 mb-4'>Facts About {name}</h2>
 				<Col>
-					<p>Capital : {country.capital[0]}</p>
+					<p>Capital : {country.capital ? country.capital[0] : ''}</p>
 					<p>Area : {country.area}</p>
 					<p>Region : {country.region}</p>
 					<p>Population : {country.population}</p>
@@ -154,5 +132,6 @@ const SingleCountry = () => {
 		</>
 	)
 }
+
 
 export default SingleCountry 
